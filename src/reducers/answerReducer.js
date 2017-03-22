@@ -20,7 +20,7 @@ export default function(state =INITIAL_STATE, action) {
                     colorChoices[Math.floor(Math.random() * colorChoices.length)],
                     colorChoices[Math.floor(Math.random() * colorChoices.length)]
                     ];
-            console.log(colors);
+            console.log('Colors: ' + colors);
             return { ...state, answer: colors };
 
         default:
