@@ -1,0 +1,41 @@
+.hints .row {
+    margin-top: 5px;
+}
+
+.colorPeg {
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 50px;
+}
+
+.hintPeg {
+    width: 10px;
+    height: 10px;
+    border: 2px solid black;
+    border-radius: 50px;
+}
+
+.black {
+    background: black;
+}
+
+.blue {
+    background: blue;
+}
+
+.green {
+    background: green;
+}
+
+.red {
+    background: red;
+}
+
+.white {
+    background: white;
+}
+
+.yellow {
+    background: yellow;
+}
