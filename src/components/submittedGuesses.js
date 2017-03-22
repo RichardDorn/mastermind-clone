@@ -32,7 +32,7 @@ class SubmittedGuesses extends Component {
 function mapStateToProps(state) {
     //Whatever gest returned will show up as props inside of BookList
     return {
-        guesses: state.guesses.all
+        guesses: state.guesses.all,
     };
 }
 
