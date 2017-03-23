@@ -5,6 +5,7 @@ import SubmittedGuess from './submittedGuess';
 class SubmittedGuesses extends Component {
     renderList() {
         console.log(this.props.guesses);
+        console.log("Solved: " + this.props.solved);
 
         if(this.props.guesses.length > 0){
             let reverse = this.props.guesses.slice().reverse();
@@ -33,6 +34,7 @@ function mapStateToProps(state) {
     //Whatever gest returned will show up as props inside of BookList
     return {
         guesses: state.guesses.all,
+        solved: state.answer.isSolved
     };
 }
 

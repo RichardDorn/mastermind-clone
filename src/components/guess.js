@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
-import { submitGuess } from '../actions/index';
+import { submitGuess, startNewGame } from '../actions';
 
 class Guess extends Component {
     onSubmit(props) {
-        this.props.submitGuess([props]);
+        this.props.submitGuess(props);
         this.props.resetForm();
         this.textInput.focus();
     }
@@ -40,7 +40,10 @@ class Guess extends Component {
                     </div>
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary pull-xs-right">Submit</button>
+                <div className="form-group row pull-xs-right">
+                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="button" onClick={ () => { this.props.startNewGame(); } } className="btn btn-danger">New Game</button>
+                </div>
             </form>
         );
     }
@@ -49,27 +52,19 @@ class Guess extends Component {
 function validate(values) {
     const errors = {};
 
-    if(!values.peg1 || values.peg1.toLowerCase() !== 'black' && values.peg1.toLowerCase() !== 'blue' 
-        && values.peg1.toLowerCase() !== 'green' && values.peg1.toLowerCase() !== 'red' 
-        && values.peg1.toLowerCase() !== 'white' && values.peg1.toLowerCase() !== 'yellow') {
-        errors.peg1 = 'Enter a valid color';
+    if(!values.peg1) {
+        errors.peg1 = 'Enter a color';
     }
 
-    if(!values.peg2 || values.peg2.toLowerCase() !== 'black' && values.peg2.toLowerCase() !== 'blue' 
-        && values.peg2.toLowerCase() !== 'green' && values.peg2.toLowerCase() !== 'red' 
-        && values.peg2.toLowerCase() !== 'white' && values.peg2.toLowerCase() !== 'yellow') {
+    if(!values.peg2) {
         errors.peg2 = 'Enter a color';
     }
 
-    if(!values.peg3 || values.peg3.toLowerCase() !== 'black' && values.peg3.toLowerCase() !== 'blue' 
-        && values.peg3.toLowerCase() !== 'green' && values.peg3.toLowerCase() !== 'red' 
-        && values.peg3.toLowerCase() !== 'white' && values.peg3.toLowerCase() !== 'yellow') {
+    if(!values.peg3) {
         errors.peg3 = 'Enter a color';
     }
 
-    if(!values.peg4 || values.peg4.toLowerCase() !== 'black' && values.peg4.toLowerCase() !== 'blue' 
-        && values.peg4.toLowerCase() !== 'green' && values.peg4.toLowerCase() !== 'red' 
-        && values.peg4.toLowerCase() !== 'white' && values.peg4.toLowerCase() !== 'yellow') {
+    if(!values.peg4) {
         errors.peg4 = 'Enter a color';
     }
 
@@ -80,4 +75,4 @@ export default reduxForm({
     form: 'submitGuessForm',
     fields: ['peg1', 'peg2', 'peg3', 'peg4'],
     validate
-}, null, { submitGuess })(Guess);
+}, null, { submitGuess, startNewGame })(Guess);

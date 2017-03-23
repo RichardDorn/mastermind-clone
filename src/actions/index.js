@@ -9,9 +9,8 @@ export function submitGuess(guess) {
     };
 }
 
-export function startNewGame(colors) {
+export function startNewGame() {
     return {
         type: NEW_GAME,
-        payload: colors
     };
 }
