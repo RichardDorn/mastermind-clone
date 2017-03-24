@@ -14,7 +14,15 @@ class SubmittedGuesses extends Component {
                     <li 
                         key={this.props.guesses.indexOf(guess)}
                         className="list-group-item" >
-                        <SubmittedGuess peg1={guess.peg1} peg2={guess.peg2} peg3={guess.peg3} peg4={guess.peg4}/>
+                        <SubmittedGuess
+                            hint1={guess.hint1}
+                            hint2={guess.hint2}
+                            hint3={guess.hint3}
+                            hint4={guess.hint4}
+                            peg1={guess.peg1}
+                            peg2={guess.peg2}
+                            peg3={guess.peg3}
+                            peg4={guess.peg4}/>
                     </li>
                 );
             });
@@ -34,7 +42,7 @@ function mapStateToProps(state) {
     //Whatever gest returned will show up as props inside of BookList
     return {
         guesses: state.guesses.all,
-        solved: state.answer.isSolved
+        solved: state.guesses.isSolved
     };
 }
 

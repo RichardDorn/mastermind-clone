@@ -5,7 +5,7 @@ import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
   guesses: GuessesReducer,
-  answer: AnswerReducer,
+  
   form: formReducer,
 });
 

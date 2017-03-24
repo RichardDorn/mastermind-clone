@@ -2,7 +2,7 @@ import React from 'react';
 import ColorPeg from './colorPeg';
 import HintPeg from './hintPeg';
 
-const SubmittedGuess = ({ peg1, peg2, peg3, peg4 }) => {
+const SubmittedGuess = ({ hint1, hint2, hint3, hint4, peg1, peg2, peg3, peg4 }) => {
     return (
         <div className="row">
             
@@ -10,20 +10,20 @@ const SubmittedGuess = ({ peg1, peg2, peg3, peg4 }) => {
             <div className="col-xs-2 hints">
                 <div className="row">
                     <div className="col-xs-6">
-                        <HintPeg color="black" />
+                        <HintPeg color={hint1} />
                     </div>
 
                     <div className="col-xs-6">
-                        <HintPeg color="white" />
+                        <HintPeg color={hint2} />
                     </div>
                 </div>
 
                 <div className="row">
                     <div className="col-xs-6">
-                        <HintPeg color="white" />
+                        <HintPeg color={hint3} />
                     </div>
                     <div className="col-xs-6">
-                        <HintPeg color="black" />
+                        <HintPeg color={hint4} />
                     </div>
                 </div>
             </div>

@@ -16,6 +16,10 @@
     border-radius: 50px;
 }
 
+.none {
+    border: 2px solid white;
+}
+
 .black {
     background: black;
 }

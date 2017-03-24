@@ -21,7 +21,7 @@ class App extends Component {
 function mapStateToProps(state) {
     //Whatever gest returned will show up as props inside of BookList
     return {
-        answer: state.answer.answer,
+        answer: state.guesses.answer,
     };
 }
 
