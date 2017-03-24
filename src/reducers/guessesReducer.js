@@ -1,20 +1,54 @@
 import { GUESS_SUBMITTED } from '../actions';
 import { NEW_GAME } from '../actions';
 
-const INITIAL_STATE = { all: [], answer: {}, isSolved: false };
+const INITIAL_STATE = { all: [], answer: {}, difficulty: 'EASY', isSolved: false };
 
 export default function(state =INITIAL_STATE, action) {
     switch(action.type) {
         case NEW_GAME:
+            let difficulty;
+            let colorChoices =[];
 
-            let colorChoices = [
-                'black',
-                'blue',
-                'green',
-                'red',
-                'white',
-                'yellow',
-            ];
+            switch(action.payload) {
+                case 'MEDIUM':
+                    difficulty = 'MEDIUM';
+                    colorChoices = [
+                        'black',
+                        'blue',
+                        'green',
+                        'pink',
+                        'red',
+                        'white',
+                        'yellow',
+                    ];
+                break;
+
+                case 'HARD':
+                    difficulty = 'HARD';
+                    colorChoices = [
+                    'black',
+                    'blue',
+                    'brown',
+                    'green',
+                    'pink',
+                    'red',
+                    'white',
+                    'yellow',
+                ];
+                break;
+
+                default:
+                    difficulty = 'EASY';
+                    colorChoices = [
+                        'black',
+                        'blue',
+                        'green',
+                        'red',
+                        'white',
+                        'yellow',
+                    ];
+                break;
+            }
 
             let colors = {
                     peg1: colorChoices[Math.floor(Math.random() * colorChoices.length)],
@@ -23,11 +57,9 @@ export default function(state =INITIAL_STATE, action) {
                     peg4: colorChoices[Math.floor(Math.random() * colorChoices.length)]
             };
             
-            return { ...state, all: [], answer: colors, isSolved: false };
+            return { ...state, all: [], answer: colors, difficulty: difficulty, isSolved: false };
 
         case GUESS_SUBMITTED:
-
-            let solution = false;
 
             let peg1 = state.answer.peg1;
             let peg2 = state.answer.peg2;
@@ -47,23 +79,24 @@ export default function(state =INITIAL_STATE, action) {
             if(peg3 === peg3A){ blackHints++; }
             if(peg4 === peg4A){ blackHints++; }
             
-            //If all four pegs match, solution is true. Return new state.
+            //If all four pegs match, puzzle is solved. Return new state.
             if(blackHints === 4){ 
-                solution = true;
                 
                 action.payload.hint1 = 'black';
                 action.payload.hint2 = 'black';
                 action.payload.hint3 = 'black';
                 action.payload.hint4 = 'black';
 
-                return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                return { ...state, isSolved: true, all: state.all.concat(action.payload) };
              }
 
 
             let colorCount = {
                 black: 0,
                 blue: 0,
+                brown: 0,
                 green: 0,
+                pink: 0,
                 red: 0,
                 white: 0,
                 yellow: 0
@@ -73,14 +106,14 @@ export default function(state =INITIAL_STATE, action) {
             //For each peg in the answer increment it's color in colorCount by 1
             Object.keys(state.answer).forEach(function(key){ colorCount[state.answer[key]]++; });
             
-            //Compare each peg in guess to colorCount. If peg's color is > 1 in colorCount add 1 to totalHints and decrease tht colors count by 1.
+            //Compare each peg in guess to colorCount. If peg's color is > 1 in colorCount add 1 to totalHints and decrease that color's count by 1.
             Object.keys(action.payload).forEach(function(key){
                 if( colorCount[action.payload[key]] ){
                     totalHints++;
                     colorCount[action.payload[key]]--;
                 }
             });
-            console.log(totalHints);
+            console.log('Total Hints: ' + totalHints);
 
             let whiteHints = totalHints - blackHints;
             
@@ -92,14 +125,14 @@ export default function(state =INITIAL_STATE, action) {
                         action.payload.hint3 = 'black';
                         action.payload.hint4 = 'white';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else {
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'black';
                         action.payload.hint3 = 'black';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }
 
                 case 2:
@@ -109,21 +142,21 @@ export default function(state =INITIAL_STATE, action) {
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'white';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 1) {
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'black';
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else {
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'black';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }
 
                 case 1:
@@ -133,28 +166,28 @@ export default function(state =INITIAL_STATE, action) {
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'white';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 2) {
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'white';
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 1) {
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'white';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else{
                         action.payload.hint1 = 'black';
                         action.payload.hint2 = 'none';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }
                 
                 default:
@@ -164,35 +197,35 @@ export default function(state =INITIAL_STATE, action) {
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'white';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 3) {
                         action.payload.hint1 = 'white';
                         action.payload.hint2 = 'white';
                         action.payload.hint3 = 'white';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 2) {
                         action.payload.hint1 = 'white';
                         action.payload.hint2 = 'white';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else if(whiteHints === 1) {
                         action.payload.hint1 = 'white';
                         action.payload.hint2 = 'none';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }else{
                         action.payload.hint1 = 'none';
                         action.payload.hint2 = 'none';
                         action.payload.hint3 = 'none';
                         action.payload.hint4 = 'none';
 
-                        return { ...state, isSolved: solution, all: state.all.concat(action.payload) };
+                        return { ...state, isSolved: false, all: state.all.concat(action.payload) };
                     }
             }
 

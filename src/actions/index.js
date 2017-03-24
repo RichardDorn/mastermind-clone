@@ -9,8 +9,9 @@ export function submitGuess(guess) {
     };
 }
 
-export function startNewGame() {
+export function startNewGame(difficulty) {
     return {
         type: NEW_GAME,
+        payload: difficulty
     };
 }

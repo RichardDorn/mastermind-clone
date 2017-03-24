@@ -28,8 +28,16 @@
     background: blue;
 }
 
+.brown {
+    background: saddlebrown;
+}
+
 .green {
     background: green;
+}
+
+.pink {
+    background: deeppink;
 }
 
 .red {
