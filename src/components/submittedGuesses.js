@@ -39,12 +39,10 @@ class SubmittedGuesses extends Component {
 }
 
 function mapStateToProps(state) {
-    //Whatever gest returned will show up as props inside of BookList
     return {
         guesses: state.guesses.all,
         solved: state.guesses.isSolved
     };
 }
 
-//Promote BookList from a component to a container - it needs to know about this new dispatch method, selectBook. Make it available as a prop.
 export default connect(mapStateToProps)(SubmittedGuesses);
