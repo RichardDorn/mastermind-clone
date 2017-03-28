@@ -2,7 +2,7 @@
 
 The build system is based off Stephen Grider's [ReduxSimpleStarter](https://github.com/StephenGrider/ReduxSimpleStarter) template with some updated packages.
 
-###Getting Started###
+### Getting Started
 
 Checkout this repo, install dependencies, then start the gulp process with the following:
 
@@ -12,7 +12,7 @@ Checkout this repo, install dependencies, then start the gulp process with the f
 	> npm install
 	> npm start
 ```
-###How to Play###
+### How to Play
 
 On load there is a random sequence of 4 colors generated behind the scenes. There is no maximum number of times a color can be used in the sequence. *Ex: peg1: black, peg2: green, peg3: green, peg4: white*
 
@@ -25,7 +25,7 @@ Left of your submitted guess there will be hints to help you solve the puzzle.
 
 When you have 4 black dots you have solved the puzzle.
 
-###Difficulty Level###
+### Difficulty Level
 
 * Easy - 6 colors to choose from
 * Medium - 7 colors to choose from
