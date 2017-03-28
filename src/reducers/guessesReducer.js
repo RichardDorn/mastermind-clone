@@ -90,7 +90,7 @@ export default function(state =INITIAL_STATE, action) {
                 return { ...state, isSolved: true, all: state.all.concat(action.payload) };
              }
 
-
+            //If puzzle is not solved calculate number of whiteHints
             let colorCount = {
                 black: 0,
                 blue: 0,
@@ -117,6 +117,7 @@ export default function(state =INITIAL_STATE, action) {
 
             let whiteHints = totalHints - blackHints;
             
+            //Assign proper colors to hint pegs. Any blacks first then any whites, so the answer isn't given away by order of hint pegs.
             switch(blackHints){
                 case 3:
                     if(whiteHints) {
