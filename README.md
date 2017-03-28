@@ -12,6 +12,8 @@ Checkout this repo, install dependencies, then start the gulp process with the f
 	> npm install
 	> npm start
 ```
+Navigate browser to localhost:8080
+
 ### How to Play
 
 On load there is a random sequence of 4 colors generated behind the scenes. There is no maximum number of times a color can be used in the sequence. *Ex: peg1: black, peg2: green, peg3: green, peg4: white*
