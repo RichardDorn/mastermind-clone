@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import { reduxForm, Field, reset } from 'redux-form';
 import { submitGuess, startNewGame } from '../actions';
+import MenuItem from 'material-ui/MenuItem';
+import { SelectField } from 'redux-form-material-ui';
+import { connect } from 'react-redux';
 
 class Guess extends Component {
     onSubmit(props) {
         this.props.submitGuess(props);
-        this.props.resetForm();
-        this.textInput.focus();
+        this.props.dispatch(reset('submitGuessForm'));
     }
     
     render() {
@@ -48,31 +50,64 @@ class Guess extends Component {
                 
                 <div className="form-group row">
                     <div className="col-xs-3">
-                        <input ref={(input) => { this.textInput = input; }} type="text" className="form-control" {...peg1}/>
-                        <div className="text-help">
-                            {peg1.touched ? peg1.error : ''}
-                        </div>
+                        
+                        <Field name="peg1" component={SelectField} hintText="Select a color">
+                            <MenuItem value="black" primaryText="Black"/>
+                            <MenuItem value="blue" primaryText="Blue"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
+                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
+                            <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
+                            <MenuItem value="red" primaryText="Red"/>
+                            <MenuItem value="white" primaryText="White"/>
+                            <MenuItem value="yellow" primaryText="Yellow"/>
+                        </Field>
+                        
                     </div>
                     
                     <div className="col-xs-3">
-                        <input type="text" className="form-control" {...peg2}/>
-                        <div className="text-help">
-                            {peg2.touched ? peg2.error : ''}
-                        </div>
+                        <Field name="peg2" component={SelectField} hintText="Select a color">
+                            <MenuItem value="black" primaryText="Black"/>
+                            <MenuItem value="blue" primaryText="Blue"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
+                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
+                            <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
+                            <MenuItem value="red" primaryText="Red"/>
+                            <MenuItem value="white" primaryText="White"/>
+                            <MenuItem value="yellow" primaryText="Yellow"/>
+                        </Field>
+                        
                     </div>
                     
                     <div className="col-xs-3">
-                        <input type="text" className="form-control" {...peg3}/>
-                        <div className="text-help">
-                            {peg3.touched ? peg3.error : ''}
-                        </div>
+                        <Field name="peg3" component={SelectField} hintText="Select a color">
+                            <MenuItem value="black" primaryText="Black"/>
+                            <MenuItem value="blue" primaryText="Blue"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
+                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
+                            <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
+                            <MenuItem value="red" primaryText="Red"/>
+                            <MenuItem value="white" primaryText="White"/>
+                            <MenuItem value="yellow" primaryText="Yellow"/>
+                        </Field>
+                        
                     </div>
                     
                     <div className="col-xs-3">
-                        <input type="text" className="form-control" {...peg4}/>
-                        <div className="text-help">
-                            {peg4.touched ? peg4.error : ''}
-                        </div>
+                        <Field name="peg4" component={SelectField} hintText="Select a color">
+                            <MenuItem value="black" primaryText="Black"/>
+                            <MenuItem value="blue" primaryText="Blue"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
+                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
+                            <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
+                            <MenuItem value="red" primaryText="Red"/>
+                            <MenuItem value="white" primaryText="White"/>
+                            <MenuItem value="yellow" primaryText="Yellow"/>
+                        </Field>
+                        
                     </div>
                 </div>
                 
@@ -114,8 +149,13 @@ function mapStateToProps(state) {
     };
 }
 
-export default reduxForm({
+Guess = reduxForm({
     form: 'submitGuessForm',
     fields: ['peg1', 'peg2', 'peg3', 'peg4'],
     validate
-}, (mapStateToProps), { submitGuess, startNewGame })(Guess);
+})(Guess);
+
+Guess = connect(mapStateToProps, { submitGuess, startNewGame })(Guess);
+
+export default Guess;
+
