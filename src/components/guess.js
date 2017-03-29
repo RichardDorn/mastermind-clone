@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 
 class Guess extends Component {
     onSubmit(props) {
-        props.difficulty = this.props.difficulty;
-        this.props.evaluateGuess(props);
+        this.props.evaluateGuess(props, this.props.answer);
         let that = this;
         setTimeout( () => {
             that.props.submitGuess(that.props.currentGuess);
@@ -166,7 +165,8 @@ function validate(values) {
 function mapStateToProps(state) {
     return {
         difficulty: state.difficulty.difficulty,
-        currentGuess: state.answer.currentGuess,
+        currentGuess: state.evaluation.currentGuess,
+        answer: state.answer.answer,
     };
 }
 

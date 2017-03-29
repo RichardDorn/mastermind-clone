@@ -3,10 +3,11 @@ export const GUESS_SUBMITTED = 'GUESS_SUBMITTED';
 export const NEW_GAME = 'NEW_GAME';
 export const SET_DIFFICULTY = 'SET_DIFFICULTY';
 
-export function evaluateGuess(guess) {
+export function evaluateGuess(guess, answer) {
     return {
         type: EVALUATE_GUESS,
-        payload: guess
+        payload: guess,
+        test: answer
     };
 }
 
