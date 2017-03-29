@@ -38,7 +38,6 @@ class SubmittedGuesses extends Component {
 function mapStateToProps(state) {
     return {
         guesses: state.guesses.all,
-        solved: state.guesses.isSolved
     };
 }
 

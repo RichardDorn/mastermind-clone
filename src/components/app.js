@@ -21,8 +21,8 @@ class App extends Component {
   }
   
   render() {
-    console.log(this.props.answer);
     console.log('Difficulty: ' + this.props.difficulty);
+    console.log(this.props.answer);
     return (
       <div>
         {this.props.children}

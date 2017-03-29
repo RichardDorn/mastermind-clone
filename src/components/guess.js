@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset } from 'redux-form';
-import { analyzeGuess, submitGuess, startNewGame, setDifficulty } from '../actions';
+import { evaluateGuess, submitGuess, startNewGame, setDifficulty } from '../actions';
 import MenuItem from 'material-ui/MenuItem';
 import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
@@ -8,9 +8,12 @@ import { connect } from 'react-redux';
 class Guess extends Component {
     onSubmit(props) {
         props.difficulty = this.props.difficulty;
-        console.log(props.difficulty);
-        this.props.analyzeGuess(props);
-        this.props.submitGuess(props);
+        this.props.evaluateGuess(props);
+        let that = this;
+        setTimeout( () => {
+            that.props.submitGuess(that.props.currentGuess);
+        }, 100);
+        
         this.props.dispatch(reset('submitGuessForm'));
     }
 
@@ -163,6 +166,7 @@ function validate(values) {
 function mapStateToProps(state) {
     return {
         difficulty: state.difficulty.difficulty,
+        currentGuess: state.answer.currentGuess,
     };
 }
 
@@ -172,7 +176,7 @@ Guess = reduxForm({
     validate
 })(Guess);
 
-Guess = connect(mapStateToProps, { analyzeGuess, submitGuess, startNewGame, setDifficulty })(Guess);
+Guess = connect(mapStateToProps, { evaluateGuess, submitGuess, startNewGame, setDifficulty })(Guess);
 
 export default Guess;
 
