@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset } from 'redux-form';
-import { submitGuess, startNewGame } from '../actions';
+import { analyzeGuess, submitGuess, startNewGame, setDifficulty } from '../actions';
 import MenuItem from 'material-ui/MenuItem';
 import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 
 class Guess extends Component {
     onSubmit(props) {
+        props.difficulty = this.props.difficulty;
+        console.log(props.difficulty);
+        this.props.analyzeGuess(props);
         this.props.submitGuess(props);
         this.props.dispatch(reset('submitGuessForm'));
+    }
+
+    onChangeDifficulty(e) {
+        this.props.setDifficulty(e.target.value);
+        //Set 100ms delay before calling startNewGame so this.props.difficulty has time to update.
+        //Otherwise the new game will be using color options from the previous difficulty setting.
+        let that = this;
+        setTimeout( () => {
+            that.props.startNewGame(that.props.difficulty);
+        }, 100);
+        
     }
     
     render() {
@@ -24,16 +38,18 @@ class Guess extends Component {
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <div className="form-group row">
                     <button 
-                        type="button" 
-                        onClick={ () => { this.props.startNewGame(); } } 
+                        type="button"
+                        value="EASY"
+                        onClick={ this.onChangeDifficulty.bind(this) } 
                         className="btn btn-link" 
                         disabled={ disableDifficulty('EASY') }>
                         Easy
                     </button>
                     
                     <button 
-                        type="button" 
-                        onClick={ () => { this.props.startNewGame('MEDIUM'); } } 
+                        type="button"
+                        value="MEDIUM"
+                        onClick={ this.onChangeDifficulty.bind(this) } 
                         className="btn btn-link" 
                         disabled={ disableDifficulty('MEDIUM') }>
                         Medium
@@ -41,7 +57,8 @@ class Guess extends Component {
                    
                     <button
                         type="button"
-                        onClick={ () => { this.props.startNewGame('HARD'); } }
+                        value="HARD"
+                        onClick={ this.onChangeDifficulty.bind(this) }
                         className="btn btn-link"
                         disabled={ disableDifficulty('HARD') }>
                         Hard
@@ -54,9 +71,9 @@ class Guess extends Component {
                         <Field name="peg1" component={SelectField} hintText="Select a color">
                             <MenuItem value="black" primaryText="Black"/>
                             <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
                             <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
                             <MenuItem value="red" primaryText="Red"/>
                             <MenuItem value="white" primaryText="White"/>
@@ -69,9 +86,9 @@ class Guess extends Component {
                         <Field name="peg2" component={SelectField} hintText="Select a color">
                             <MenuItem value="black" primaryText="Black"/>
                             <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
                             <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
                             <MenuItem value="red" primaryText="Red"/>
                             <MenuItem value="white" primaryText="White"/>
@@ -84,9 +101,9 @@ class Guess extends Component {
                         <Field name="peg3" component={SelectField} hintText="Select a color">
                             <MenuItem value="black" primaryText="Black"/>
                             <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
                             <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
                             <MenuItem value="red" primaryText="Red"/>
                             <MenuItem value="white" primaryText="White"/>
@@ -99,9 +116,9 @@ class Guess extends Component {
                         <Field name="peg4" component={SelectField} hintText="Select a color">
                             <MenuItem value="black" primaryText="Black"/>
                             <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="brown" primaryText="Brown"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
                             <MenuItem value="green" primaryText="Green"/>
+                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
                             { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
                             <MenuItem value="red" primaryText="Red"/>
                             <MenuItem value="white" primaryText="White"/>
@@ -145,7 +162,7 @@ function validate(values) {
 
 function mapStateToProps(state) {
     return {
-        difficulty: state.guesses.difficulty,
+        difficulty: state.difficulty.difficulty,
     };
 }
 
@@ -155,7 +172,7 @@ Guess = reduxForm({
     validate
 })(Guess);
 
-Guess = connect(mapStateToProps, { submitGuess, startNewGame })(Guess);
+Guess = connect(mapStateToProps, { analyzeGuess, submitGuess, startNewGame, setDifficulty })(Guess);
 
 export default Guess;
 
