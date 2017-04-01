@@ -26,6 +26,8 @@ const FIELDS = {
     },
 };
 
+const DIFFICULTIES = [ 'EASY', 'MEDIUM', 'HARD' ];
+
 class Guess extends Component {
     onSubmit(props) {
         this.props.submitGuess(props);
@@ -65,9 +67,8 @@ class Guess extends Component {
             </div>
         );
     }
-    
-    render() {
-        const { handleSubmit } = this.props;
+
+    renderDiffButton(diff) {
         let difficultyLevel = this.props.difficulty;
         function disableDifficulty(difficulty) {
             if(difficultyLevel === difficulty) {
@@ -76,34 +77,25 @@ class Guess extends Component {
         };
 
         return (
+            <button 
+                key={diff}
+                type="button"
+                value={diff}
+                onClick={ this.onChangeDifficulty.bind(this) } 
+                className="btn btn-link" 
+                disabled={ disableDifficulty(diff) } >
+                {diff}
+            </button>
+        );
+    }
+    
+    render() {
+        const { handleSubmit } = this.props;
+
+        return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
                 <div className="form-group row">
-                    <button 
-                        type="button"
-                        value="EASY"
-                        onClick={ this.onChangeDifficulty.bind(this) } 
-                        className="btn btn-link" 
-                        disabled={ disableDifficulty('EASY') }>
-                        Easy
-                    </button>
-                    
-                    <button 
-                        type="button"
-                        value="MEDIUM"
-                        onClick={ this.onChangeDifficulty.bind(this) } 
-                        className="btn btn-link" 
-                        disabled={ disableDifficulty('MEDIUM') }>
-                        Medium
-                    </button>
-                   
-                    <button
-                        type="button"
-                        value="HARD"
-                        onClick={ this.onChangeDifficulty.bind(this) }
-                        className="btn btn-link"
-                        disabled={ disableDifficulty('HARD') }>
-                        Hard
-                    </button>
+                    { _.map(DIFFICULTIES, this.renderDiffButton.bind(this)) }
                 </div>
                 
                 <div className="form-group row">
