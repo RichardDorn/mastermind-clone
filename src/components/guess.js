@@ -4,6 +4,26 @@ import { evaluateGuess, submitGuess, startNewGame, setDifficulty } from '../acti
 import MenuItem from 'material-ui/MenuItem';
 import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
+import _ from 'lodash';
+
+const FIELDS = {
+    peg1: {
+        type: SelectField,
+        label: 'peg1'
+    },
+    peg2: {
+        type: SelectField,
+        label: 'peg2'
+    },
+    peg3: {
+        type: SelectField,
+        label: 'peg3'
+    },
+    peg4: {
+        type: SelectField,
+        label: 'peg4'
+    },
+};
 
 class Guess extends Component {
     onSubmit(props) {
@@ -26,9 +46,27 @@ class Guess extends Component {
         }, 100);
         
     }
+
+    renderField(fieldConfig) {
+        return (
+            <div key={fieldConfig.label} className="col-xs-3">
+                <Field name={fieldConfig.label} component={fieldConfig.type} hintText="Select a color">
+                    <MenuItem value="black" primaryText="Black"/>
+                    <MenuItem value="blue" primaryText="Blue"/>
+                    { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
+                    <MenuItem value="green" primaryText="Green"/>
+                    { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
+                    { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
+                    <MenuItem value="red" primaryText="Red"/>
+                    <MenuItem value="white" primaryText="White"/>
+                    <MenuItem value="yellow" primaryText="Yellow"/>
+                </Field>
+            </div>
+        );
+    }
     
     render() {
-        const { fields: { peg1, peg2, peg3, peg4 },handleSubmit } = this.props;
+        const { handleSubmit } = this.props;
         let difficultyLevel = this.props.difficulty;
         function disableDifficulty(difficulty) {
             if(difficultyLevel === difficulty) {
@@ -68,66 +106,7 @@ class Guess extends Component {
                 </div>
                 
                 <div className="form-group row">
-                    <div className="col-xs-3">
-                        
-                        <Field name="peg1" component={SelectField} hintText="Select a color">
-                            <MenuItem value="black" primaryText="Black"/>
-                            <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
-                            <MenuItem value="green" primaryText="Green"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
-                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
-                            <MenuItem value="red" primaryText="Red"/>
-                            <MenuItem value="white" primaryText="White"/>
-                            <MenuItem value="yellow" primaryText="Yellow"/>
-                        </Field>
-                        
-                    </div>
-                    
-                    <div className="col-xs-3">
-                        <Field name="peg2" component={SelectField} hintText="Select a color">
-                            <MenuItem value="black" primaryText="Black"/>
-                            <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
-                            <MenuItem value="green" primaryText="Green"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
-                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
-                            <MenuItem value="red" primaryText="Red"/>
-                            <MenuItem value="white" primaryText="White"/>
-                            <MenuItem value="yellow" primaryText="Yellow"/>
-                        </Field>
-                        
-                    </div>
-                    
-                    <div className="col-xs-3">
-                        <Field name="peg3" component={SelectField} hintText="Select a color">
-                            <MenuItem value="black" primaryText="Black"/>
-                            <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
-                            <MenuItem value="green" primaryText="Green"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
-                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
-                            <MenuItem value="red" primaryText="Red"/>
-                            <MenuItem value="white" primaryText="White"/>
-                            <MenuItem value="yellow" primaryText="Yellow"/>
-                        </Field>
-                        
-                    </div>
-                    
-                    <div className="col-xs-3">
-                        <Field name="peg4" component={SelectField} hintText="Select a color">
-                            <MenuItem value="black" primaryText="Black"/>
-                            <MenuItem value="blue" primaryText="Blue"/>
-                            { this.props.difficulty === 'HARD' && <MenuItem value="brown" primaryText="Brown"/> }
-                            <MenuItem value="green" primaryText="Green"/>
-                            { this.props.difficulty === 'MEDIUM' && <MenuItem value="pink" primaryText="Pink"/> }
-                            { this.props.difficulty === 'HARD' && <MenuItem value="pink" primaryText="Pink"/> }
-                            <MenuItem value="red" primaryText="Red"/>
-                            <MenuItem value="white" primaryText="White"/>
-                            <MenuItem value="yellow" primaryText="Yellow"/>
-                        </Field>
-                        
-                    </div>
+                    { _.map(FIELDS, this.renderField.bind(this)) }
                 </div>
                 
                 <div className="form-group row pull-xs-right">
@@ -143,21 +122,11 @@ class Guess extends Component {
 function validate(values) {
     const errors = {};
 
-    if(!values.peg1) {
-        errors.peg1 = 'Enter a color';
-    }
-
-    if(!values.peg2) {
-        errors.peg2 = 'Enter a color';
-    }
-
-    if(!values.peg3) {
-        errors.peg3 = 'Enter a color';
-    }
-
-    if(!values.peg4) {
-        errors.peg4 = 'Enter a color';
-    }
+    _.each(FIELDS, (type, field) => {
+        if(!values[field]) {
+            errors[field] = `Enter a color for ${field}`;
+        }
+    });
 
     return errors;
 }
@@ -172,7 +141,7 @@ function mapStateToProps(state) {
 
 Guess = reduxForm({
     form: 'submitGuessForm',
-    fields: ['peg1', 'peg2', 'peg3', 'peg4'],
+    fields: _.keys(FIELDS),
     validate
 })(Guess);
 
