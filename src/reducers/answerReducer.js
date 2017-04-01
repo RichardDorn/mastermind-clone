@@ -1,4 +1,4 @@
-import { NEW_GAME, EVALUATE_GUESS } from '../actions';
+import { NEW_GAME } from '../actions';
 
 const INITIAL_STATE = { answer: {}, isSolved: false };
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset } from 'redux-form';
-import { evaluateGuess, submitGuess, startNewGame, setDifficulty } from '../actions';
+import { guessEvaluated, submitGuess, startNewGame, setDifficulty } from '../actions';
 import MenuItem from 'material-ui/MenuItem';
 import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
+import GuessesSelector from '../selectors/guessesSelector';
 import _ from 'lodash';
 
 const FIELDS = {
@@ -27,10 +28,10 @@ const FIELDS = {
 
 class Guess extends Component {
     onSubmit(props) {
-        this.props.evaluateGuess(props, this.props.answer);
+        this.props.submitGuess(props);
         let that = this;
         setTimeout( () => {
-            that.props.submitGuess(that.props.currentGuess);
+            that.props.guessEvaluated(that.props.evaluatedGuess);
         }, 100);
         
         this.props.dispatch(reset('submitGuessForm'));
@@ -134,8 +135,7 @@ function validate(values) {
 function mapStateToProps(state) {
     return {
         difficulty: state.difficulty.difficulty,
-        currentGuess: state.evaluation.currentGuess,
-        answer: state.answer.answer,
+        evaluatedGuess: GuessesSelector(state),
     };
 }
 
@@ -145,7 +145,7 @@ Guess = reduxForm({
     validate
 })(Guess);
 
-Guess = connect(mapStateToProps, { evaluateGuess, submitGuess, startNewGame, setDifficulty })(Guess);
+Guess = connect(mapStateToProps, { guessEvaluated, submitGuess, startNewGame, setDifficulty })(Guess);
 
 export default Guess;
 

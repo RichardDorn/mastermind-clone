@@ -1,6 +1,6 @@
-import { GUESS_SUBMITTED, NEW_GAME } from '../actions';
+import { GUESS_SUBMITTED, NEW_GAME, GUESS_EVALUATED } from '../actions';
 
-const INITIAL_STATE = { all: [] };
+const INITIAL_STATE = { all: [], currentGuess: {} };
 
 export default function(state =INITIAL_STATE, action) {
     switch(action.type) {
@@ -10,6 +10,10 @@ export default function(state =INITIAL_STATE, action) {
 
         case GUESS_SUBMITTED:
 
+            return { ...state, currentGuess: action.payload };
+
+        case GUESS_EVALUATED:
+            
             return { ...state, all: state.all.concat(action.payload) };
 
         default:

@@ -1,13 +1,12 @@
-export const EVALUATE_GUESS = 'EVALUATE_GUESS';
+export const GUESS_EVALUATED = 'GUESS_EVALUATED';
 export const GUESS_SUBMITTED = 'GUESS_SUBMITTED';
 export const NEW_GAME = 'NEW_GAME';
 export const SET_DIFFICULTY = 'SET_DIFFICULTY';
 
-export function evaluateGuess(guess, answer) {
+export function guessEvaluated(evaluatedGuess) {
     return {
-        type: EVALUATE_GUESS,
-        payload: guess,
-        test: answer
+        type: GUESS_EVALUATED,
+        payload: evaluatedGuess
     };
 }
 

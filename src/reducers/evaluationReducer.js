@@ -1,3 +1,5 @@
+//Not currently used. Delete once absolutely confident it's not needed.
+
 import { EVALUATE_GUESS } from '../actions';
 
 const INITIAL_STATE = { currentGuess: {}, isSolved: false };
