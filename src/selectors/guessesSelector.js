@@ -2,9 +2,8 @@ import { createSelector } from 'reselect';
 
 const answerSelector = state => state.answer.answer;
 const currentGuessSelector = state => state.guesses.currentGuess;
-const listSelector = state => state.guesses.all;
 
-const evaluateGuess = (answer, currentGuess, all) => {
+const evaluateGuess = (answer, currentGuess) => {
     let peg1 = answer.peg1;
     let peg2 = answer.peg2;
     let peg3 = answer.peg3;
@@ -177,6 +176,5 @@ const evaluateGuess = (answer, currentGuess, all) => {
 export default createSelector(
     answerSelector,
     currentGuessSelector,
-    listSelector,
     evaluateGuess
 );

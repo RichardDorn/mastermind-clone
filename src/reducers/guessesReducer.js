@@ -6,7 +6,7 @@ export default function(state =INITIAL_STATE, action) {
     switch(action.type) {
         case NEW_GAME:
             
-            return { ...state, all: [] };
+            return { ...state, all: [], currentGuess: {} };
 
         case GUESS_SUBMITTED:
 
