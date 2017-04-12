@@ -6,6 +6,8 @@ import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 import GuessesSelector from '../selectors/guessesSelector';
 import _ from 'lodash';
+import Modal from './modal';
+import {browserHistory} from 'react-router';
 
 const FIELDS = {
     peg1: {
@@ -26,9 +28,8 @@ const FIELDS = {
     },
 };
 
-const DIFFICULTIES = [ 'EASY', 'MEDIUM', 'HARD' ];
-
 class Guess extends Component {
+
     onSubmit(props) {
         this.props.submitGuess(props);
         let that = this;
@@ -37,17 +38,6 @@ class Guess extends Component {
         }, 100);
         
         this.props.dispatch(reset('submitGuessForm'));
-    }
-
-    onChangeDifficulty(e) {
-        this.props.setDifficulty(e.target.value);
-        //Set 100ms delay before calling startNewGame so this.props.difficulty has time to update.
-        //Otherwise the new game will be using color options from the previous difficulty setting.
-        let that = this;
-        setTimeout( () => {
-            that.props.startNewGame(that.props.difficulty);
-        }, 100);
-        
     }
 
     renderField(fieldConfig) {
@@ -68,25 +58,8 @@ class Guess extends Component {
         );
     }
 
-    renderDiffButton(diff) {
-        let difficultyLevel = this.props.difficulty;
-        function disableDifficulty(difficulty) {
-            if(difficultyLevel === difficulty) {
-                return 'disabled';
-            }else { return ''; }
-        };
-
-        return (
-            <button 
-                key={diff}
-                type="button"
-                value={diff}
-                onClick={ this.onChangeDifficulty.bind(this) } 
-                className="btn btn-link" 
-                disabled={ disableDifficulty(diff) } >
-                {diff}
-            </button>
-        );
+    quitGame() {
+        browserHistory.push('/');
     }
     
     render() {
@@ -94,18 +67,26 @@ class Guess extends Component {
 
         return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                <div className="form-group row">
-                    { _.map(DIFFICULTIES, this.renderDiffButton.bind(this)) }
-                </div>
                 
-                <div className="form-group row">
-                    { _.map(FIELDS, this.renderField.bind(this)) }
-                </div>
-                
-                <div className="form-group row pull-xs-right">
-                    <button type="submit" className="btn btn-primary">Submit</button>
-                    <button type="button" onClick={ () => { this.props.startNewGame(this.props.difficulty); } } className="btn btn-danger">New Game</button>
-                </div>
+                {!this.props.solved &&
+                <div>
+                    <div className="form-group row">
+                        { _.map(FIELDS, this.renderField.bind(this)) }
+                    </div>
+                    
+                    <div className="form-group row pull-xs-right">
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                        <button type="button" onClick={ this.quitGame } className="btn btn-danger">Quit</button>
+                    </div>
+                </div>}
+
+                {this.props.solved && 
+                <Modal>
+                    <p>Difficulty: {this.props.difficulty}</p>
+                    <p>Total Guesses: {this.props.totalGuesses}</p>
+                    <button type="button" onClick={ this.quitGame } className="btn btn-danger">Quit</button>
+                    <button type="button" onClick={ () => { this.props.startNewGame(this.props.difficulty); } } className="btn btn-primary">New Game</button>
+                </Modal>}
             </form>
         );
     }
@@ -126,7 +107,9 @@ function validate(values) {
 
 function mapStateToProps(state) {
     return {
+        solved: state.answer.isSolved,
         difficulty: state.difficulty.difficulty,
+        totalGuesses: state.guesses.all.length,
         evaluatedGuess: GuessesSelector(state),
     };
 }
