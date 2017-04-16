@@ -9,7 +9,9 @@ injectTapEventPlugin();
 class App extends Component {
   componentWillMount() {
     this.props.setDifficulty('EASY');
-    this.props.startNewGame( this.props.difficulty );
+    setTimeout(() => {
+      this.props.startNewGame( this.props.difficulty );
+    }, 100);
   }
 
   shouldComponentUpdate(nextProps) {
