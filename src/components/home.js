@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { startNewGame, setDifficulty } from '../actions';
+import { startNewGame, setDifficulty, setGameType } from '../actions';
 import {Link} from 'react-router';
 
 const DIFFICULTIES = [ 'EASY', 'MEDIUM', 'HARD' ];
@@ -53,6 +53,12 @@ class Home extends Component {
         </button>
         </Link>
 
+        <Link to={'/game'} >
+        <button onClick={() => {this.props.setGameType('FULL')}}>
+          full game
+        </button>
+        </Link>
+
       </div>
     );
   }
@@ -64,6 +70,6 @@ function mapStateToProps(state) {
     };
 }
 
-Home = connect(mapStateToProps, { startNewGame, setDifficulty })(Home);
+Home = connect(mapStateToProps, { startNewGame, setDifficulty, setGameType })(Home);
 
 export default Home;

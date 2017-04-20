@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { reduxForm, Field, reset } from 'redux-form';
-import { guessEvaluated, submitGuess, startNewGame, setDifficulty } from '../actions';
+import { guessEvaluated, submitGuess, startNewGame, setDifficulty, setGameType, evaluateScore, gameOver } from '../actions';
 import MenuItem from 'material-ui/MenuItem';
 import { SelectField } from 'redux-form-material-ui';
 import { connect } from 'react-redux';
 import GuessesSelector from '../selectors/guessesSelector';
+import ScoreSelector from '../selectors/scoreSelector';
 import _ from 'lodash';
 import Modal from './modal';
 import {browserHistory} from 'react-router';
@@ -36,6 +37,16 @@ class Guess extends Component {
         setTimeout( () => {
             that.props.guessEvaluated(that.props.evaluatedGuess);
         }, 100);
+
+        setTimeout( () => {
+            if(that.props.solved) {
+                that.props.evaluateScore(that.props.evaluatedScore);
+            }
+        }, 100);
+
+        if(this.props.gameType === 'FULL' && this.props.totalGuesses > 29 ) {
+                this.props.gameOver();
+        }
         
         this.props.dispatch(reset('submitGuessForm'));
     }
@@ -59,6 +70,7 @@ class Guess extends Component {
     }
 
     quitGame() {
+        this.props.setGameType(null);
         browserHistory.push('/');
     }
     
@@ -67,7 +79,6 @@ class Guess extends Component {
 
         return (
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-                
                 {!this.props.solved &&
                 <div>
                     <div className="form-group row">
@@ -76,7 +87,7 @@ class Guess extends Component {
                     
                     <div className="form-group row pull-xs-right">
                         <button type="submit" className="btn btn-primary">Submit</button>
-                        <button type="button" onClick={ this.quitGame } className="btn btn-danger">Quit</button>
+                        <button type="button" onClick={ this.quitGame.bind(this) } className="btn btn-danger">Quit</button>
                     </div>
                 </div>}
 
@@ -84,7 +95,7 @@ class Guess extends Component {
                 <Modal>
                     <p>Difficulty: {this.props.difficulty}</p>
                     <p>Total Guesses: {this.props.totalGuesses}</p>
-                    <button type="button" onClick={ this.quitGame } className="btn btn-danger">Quit</button>
+                    <button type="button" onClick={ this.quitGame.bind(this) } className="btn btn-danger">Quit</button>
                     <button type="button" onClick={ () => { this.props.startNewGame(this.props.difficulty); } } className="btn btn-primary">New Game</button>
                 </Modal>}
             </form>
@@ -108,9 +119,12 @@ function validate(values) {
 function mapStateToProps(state) {
     return {
         solved: state.answer.isSolved,
+        score: state.game.score,
         difficulty: state.difficulty.difficulty,
         totalGuesses: state.guesses.all.length,
         evaluatedGuess: GuessesSelector(state),
+        evaluatedScore: ScoreSelector(state),
+        gameType: state.game.gameType,
     };
 }
 
@@ -120,7 +134,7 @@ Guess = reduxForm({
     validate
 })(Guess);
 
-Guess = connect(mapStateToProps, { guessEvaluated, submitGuess, startNewGame, setDifficulty })(Guess);
+Guess = connect(mapStateToProps, { guessEvaluated, submitGuess, startNewGame, setDifficulty, setGameType, evaluateScore, gameOver })(Guess);
 
 export default Guess;
 
