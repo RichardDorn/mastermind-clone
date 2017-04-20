@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 class Modal extends Component {
+    static propTypes = {
+        children: React.PropTypes.node,
+    }
+    
     componentDidMount() {
         this.modalTarget = document.createElement('div');
         this.modalTarget.className = 'modal';
